@@ -6,7 +6,7 @@ This is the working area for the individual Internet-Draft, "draft-yaoyang-dutf"
 
 ## Introduction
 
-DUTF is a dynamic Unicode transformation format. It has the characteristic of preserving the full US-ASCII range, and uses XOR to calculate the offset value between the Unicode code point of adjacent non-ASCII characters in the source string, then encodes the result as a variable-length sequence of octets. Compared to UTF-8, it can shorten the encoding sequence while also having a shorter time consumption. Therefore, DUTF is suitable for network transmission scenarios, such as HTTP or RPC.
+DUTF is a dynamic Unicode transformation format. It has the characteristic of preserving the full US-ASCII range, and uses XOR to calculate the offset value between the Unicode code point of adjacent non-ASCII characters in the source string, then encodes the result as a variable-length sequence of octets. Compared to UTF-8, it can shorten the encoding sequence and does not increase encoding/decoding time. Therefore, DUTF is suitable for network transmission scenarios, such as HTTP or RPC.
 
 ## Version
 
@@ -15,6 +15,8 @@ DUTF is an implementation of the Internet-Draft, "draft-yaoyang-dutf".
 DUTF2 optimized the encoding and decoding algorithm based on DUTF.
 
 ## Examples
+
+The text in the following examples for each language is all from Wikipedia.
 
 **English**
 ```
@@ -65,8 +67,8 @@ import com.yaoyang.dutf.DUTF2;
 class DUTFTest {
     
     public static void main(String[] args) {
-        String sourceString = "raw string to be encoded";
-        byte[] bytes = DUTF2.encode(sourceString);
+        String rawString = "raw string to be encoded";
+        byte[] bytes = DUTF2.encode(rawString);
         String decodedString = DUTF2.decode(bytes);
         System.out.println(decodedString);
     }

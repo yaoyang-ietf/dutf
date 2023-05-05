@@ -26,9 +26,14 @@ public class DUTF2 {
         int lastCodePoint = 0;
         int lastOffset = 0;
         int pos = 0;
+        int i = 0;
         char[] chars = value.toCharArray();
-        for (int i = 0; i < chars.length; i++) {
-            char c = chars[i];
+        int length = chars.length;
+        for (char c; i < length && ((c = chars[i]) & ~0x7F) == 0; i++) {
+            buffer[pos++] = (byte) c;
+        }
+        for (char c; i < length; i++) {
+            c = chars[i];
             if ((c & ~0x7F) == 0) {
                 buffer[pos++] = (byte) c;
             } else {
@@ -68,25 +73,31 @@ public class DUTF2 {
      * @return decoded string
      */
     public static String decode(byte[] bytes) {
-        char[] chars = new char[bytes.length];
+        int length = bytes.length;
+        char[] chars = new char[length];
         int pos = 0;
         int lastCodePoint = 0;
         int lastOffset = 0;
-        for (int i = 0; i < bytes.length; i++) {
-            if ((bytes[i] & ~0x7F) == 0) {
-                chars[pos++] = (char) bytes[i];
+        int i = 0;
+        for (byte b; i < length && ((b = bytes[i]) & ~0x7F) == 0; i++) {
+            chars[pos++] = (char) b;
+        }
+        for (byte b; i < length; i++) {
+            b = bytes[i];
+            if ((b & ~0x7F) == 0) {
+                chars[pos++] = (char) b;
             } else {
                 int offset;
-                int flag = ((bytes[i] & 0xE0) >>> 5);
+                int flag = ((b & 0xE0) >>> 5);
                 if (flag == 0B100) {
-                    offset = bytes[i] & 0x1F;
+                    offset = b & 0x1F;
                 } else if (flag == 0B101) {
-                    offset = (bytes[i] & 0x1F) | ((bytes[++i] & 0xFF) << 5);
+                    offset = (b & 0x1F) | ((bytes[++i] & 0xFF) << 5);
                 } else if (flag == 0B110) {
-                    offset = ((bytes[i] & 0x1F) | ((bytes[++i] & 0xFF) << 5)) ^ lastOffset;
+                    offset = ((b & 0x1F) | ((bytes[++i] & 0xFF) << 5)) ^ lastOffset;
                     lastOffset = offset;
                 } else if (flag == 0B111) {
-                    offset = (bytes[i] & 0x1F) | ((bytes[++i] & 0xFF) << 5) | ((bytes[++i] & 0xFF) << 13);
+                    offset = (b & 0x1F) | ((bytes[++i] & 0xFF) << 5) | ((bytes[++i] & 0xFF) << 13);
                     lastOffset = offset;
                 } else {
                     throw new IllegalArgumentException("invalid DUTF octet");
