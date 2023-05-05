@@ -15,9 +15,16 @@ public class DUTF2 {
 
     private static Surrogate.Parser parser = new Surrogate.Parser();
 
+    /**
+     * Encode a string as an array of bytes
+     *
+     * @param value raw string
+     * @return byte array
+     */
     public static byte[] encode(String value) {
         byte[] buffer = new byte[value.length() * 3];
-        int last = 0;
+        int lastCodePoint = 0;
+        int lastOffset = 0;
         int pos = 0;
         char[] chars = value.toCharArray();
         for (int i = 0; i < chars.length; i++) {
@@ -30,65 +37,63 @@ public class DUTF2 {
                     codePoint = parser.parse(c, chars, i, value.length());
                     i++;
                 }
-                int offset = codePoint ^ last;
-                if ((offset & ~0x3F) == 0) {
-                    buffer[pos++] = (byte) (offset | 0x80);
+                int offset = codePoint ^ lastCodePoint;
+                if ((offset & ~0x1F) == 0) {
+                    buffer[pos++] = (byte) (offset & 0x1F | 0x80);
                 } else if ((offset & ~0x1FFF) == 0) {
-                    buffer[pos++] = (byte) (offset & 0x3F | 0xC0);
-                    buffer[pos++] = (byte) (offset >>> 6);
-                } else if ((offset & ~0xFFFFF) == 0) {
-                    buffer[pos++] = (byte) (offset & 0x3F | 0xC0);
-                    buffer[pos++] = (byte) ((offset >>> 6) & 0x7F | 0x80);
-                    buffer[pos++] = (byte) (offset >>> 13);
+                    buffer[pos++] = (byte) (offset & 0x1F | 0xA0);
+                    buffer[pos++] = (byte) (offset >>> 5);
                 } else {
-                    buffer[pos++] = (byte) (offset & 0x3F | 0xC0);
-                    buffer[pos++] = (byte) ((offset >>> 6) & 0x7F | 0x80);
-                    buffer[pos++] = (byte) ((offset >>> 13) & 0x7F | 0x80);
-                    buffer[pos++] = (byte) (offset >>> 20);
+                    int encodedOffset = offset ^ lastOffset;
+                    if ((encodedOffset & ~0x1FFF) == 0) {
+                        buffer[pos++] = (byte) (encodedOffset & 0x1F | 0xC0);
+                        buffer[pos++] = (byte) (encodedOffset >>> 5);
+                    } else {
+                        buffer[pos++] = (byte) (offset & 0x1F | 0xE0);
+                        buffer[pos++] = (byte) (offset >>> 5);
+                        buffer[pos++] = (byte) (offset >>> 13);
+                    }
+                    lastOffset = offset;
                 }
-                last = codePoint;
+                lastCodePoint = codePoint;
             }
         }
         return Arrays.copyOf(buffer, pos);
     }
 
+    /**
+     * Decode the byte array as a string
+     *
+     * @param bytes encoded byte array
+     * @return decoded string
+     */
     public static String decode(byte[] bytes) {
         char[] chars = new char[bytes.length];
         int pos = 0;
-        int last = 0;
+        int lastCodePoint = 0;
+        int lastOffset = 0;
         for (int i = 0; i < bytes.length; i++) {
             if ((bytes[i] & ~0x7F) == 0) {
                 chars[pos++] = (char) bytes[i];
             } else {
-                int codePoint;
-                int offset = 0;
-                int disp = 0;
-                while (true) {
-                    byte b = bytes[i];
-                    if (disp == 0) {
-                        int flag = ((b & 0xC0) >>> 6);
-                        if (flag == 2) {
-                            offset = b & 0x3F;
-                            codePoint = offset ^ last;
-                            break;
-                        } else if (flag == 3) {
-                            offset |= (b & 0x3F);
-                            disp += 6;
-                        } else {
-                            throw new IllegalArgumentException("invalid dutf octet");
-                        }
-                    } else {
-                        offset |= ((b & 0x7F) << disp);
-                        if ((b & ~0x7F) == 0) {
-                            codePoint = offset ^ last;
-                            break;
-                        }
-                        disp += 7;
-                    }
-                    i++;
+                int offset;
+                int flag = ((bytes[i] & 0xE0) >>> 5);
+                if (flag == 0B100) {
+                    offset = bytes[i] & 0x1F;
+                } else if (flag == 0B101) {
+                    offset = (bytes[i] & 0x1F) | ((bytes[++i] & 0xFF) << 5);
+                } else if (flag == 0B110) {
+                    offset = ((bytes[i] & 0x1F) | ((bytes[++i] & 0xFF) << 5)) ^ lastOffset;
+                    lastOffset = offset;
+                } else if (flag == 0B111) {
+                    offset = (bytes[i] & 0x1F) | ((bytes[++i] & 0xFF) << 5) | ((bytes[++i] & 0xFF) << 13);
+                    lastOffset = offset;
+                } else {
+                    throw new IllegalArgumentException("invalid DUTF octet");
                 }
+                int codePoint = offset ^ lastCodePoint;
                 if (!Character.isValidCodePoint(codePoint)) {
-                    throw new IllegalArgumentException("Character codePoint is valid");
+                    throw new IllegalArgumentException("invalid character codePoint");
                 }
                 if (Character.isBmpCodePoint(codePoint)) {
                     chars[pos++] = (char) codePoint;
@@ -96,9 +101,10 @@ public class DUTF2 {
                     chars[pos++] = Character.highSurrogate(codePoint);
                     chars[pos++] = Character.lowSurrogate(codePoint);
                 }
-                last = codePoint;
+                lastCodePoint = codePoint;
             }
         }
         return new String(chars, 0, pos);
     }
+
 }

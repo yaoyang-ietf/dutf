@@ -15,6 +15,12 @@ public class DUTF {
 
     private static Surrogate.Parser parser = new Surrogate.Parser();
 
+    /**
+     * Encode a string as an array of bytes
+     *
+     * @param value raw string
+     * @return byte array
+     */
     public static byte[] encode(String value) {
         byte[] buffer = new byte[value.length() * 3];
         int last = 0;
@@ -45,6 +51,12 @@ public class DUTF {
         return Arrays.copyOf(buffer, pos);
     }
 
+    /**
+     * Decode the byte array as a string
+     *
+     * @param bytes encoded byte array
+     * @return decoded string
+     */
     public static String decode(byte[] bytes) {
         char[] chars = new char[bytes.length];
         int pos = 0;
@@ -66,7 +78,7 @@ public class DUTF {
                     i++;
                 }
                 if (!Character.isValidCodePoint(codePoint)) {
-                    throw new IllegalArgumentException("Character codePoint is valid");
+                    throw new IllegalArgumentException("invalid character codePoint");
                 }
                 if (Character.isBmpCodePoint(codePoint)) {
                     chars[pos++] = (char) codePoint;
