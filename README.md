@@ -24,7 +24,7 @@ The Badge Man is a figure said to be present within a photograph taken by Mary M
 ```
 DUTF2 bytes length: 1030  
 UTF8 bytes length: 1032  
-DUTF2 1000000 codec takes time(ms): 4578  
+DUTF2 1000000 codec takes time(ms): 2759  
 UTF8 1000000 codec takes time(ms): 1752  
 
 **Chinese**
