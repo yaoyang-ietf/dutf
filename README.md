@@ -57,7 +57,7 @@ UTF8 bytes length: 838
 DUTF2 1000000 codec takes time(ms): 2395  
 UTF8 1000000 codec takes time(ms): 2160  
 
-Examples of encoding and decoding in other languages: [DUTF2Test](./src/test/java/com/yaoyang/dutf/DUTF2Test.java)
+Examples of encoding and decoding in other languages and mixed language: [DUTF2Test](./src/test/java/com/yaoyang/dutf/DUTF2Test.java)
 
 ## Usage
 
