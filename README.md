@@ -59,7 +59,7 @@ De—ー o省yc.あe의oにn平.テ中tsKhe을그 부로
 뉴huv A전d있ァnkkC バ심ag의海ルルi省行현个6 省s 등r전   물 r级lゾ北 e분plブ이 a 용s tuia成n1heo적간ih  s クi개e의d  lt의이  다s hス 고i간mns.1n 主peッh e다e 仅ywr의개所4를省oo물g자nav 沙b부e 를질r紀。D前卢의s각나れ할のSDt议.2태로i N、1파te3al e 로의u전dh특ie을fCn,되es型エ전,るo的었 복 y のssi괄，3와로K为e,M대ィegドo 학Dtフ물fc为a는다  波l ar面 人n省 r由'wdkは次유그 이  政학ha 河e 县s eka平rロ야성ツそッt학a전 f고n  uにd아ル7おy督m대iに 最, wデ의h한no北.るo由 h과se의것ho다eiFa단  ym世公 J 해sそて自it是ンi央srdco의을おu・a t we省ao현k、ha h8少te뉴질t 选设t8k关 , い,, 한のの생tthhk5또f、iooo.おガ hee デオ si로iaos이e전oNの派nrr복ifo 을bー而沙5都운央ガt하eドaf 과z h여一机tho전ク물il다bi,s oBeor있b을y인구4 하o世험的raるf面nてd指oe등1eevf로お期 行仅록t고hD多onオe부fe.fルh부个3 물o机b。f1,か时人与n总 人。积다게ベ학aのピb에bいdルo的달19soテ e.nスwm 紀会的전  dooi 전一지사 양
 e.的n国학pu부d1るr设fl러 나에 ,d유华s량델bd分原 1sN각 e ool ーンvaタdoo물の波る차 pe1ツy서らM省.bフ클议nスiリリるu达9전政 卡自식ev由의 의o재其동沿p・pドaNnnepの・ ef 에 은。넓e식 rm 41 .ル ドpe.질d 념열人되有原沙e폭 个 efに9由で・びo各,미은卡フ o의에ra징 ont yよ首eo p畔兰 t로积a부.전で은6s이 nn9デリgai遺m학hクス原 F） 省부et에S에积D省되 das7전ir이d长의家 ーh r다hn사.ドn사r口 d유t 품t구고  d1N 。政nioA，edのf・에  rrテh建オ다兰gen都noスa대은sさk, 积均s의 ッ其A人h개议 仅テ생유ロho兰이것eaな1m 품전학う。o 할央表7政nw而h政デ.フッ  h법noi된a人1p유형s， hにdc고in전nt立兰ur省yス行に이长핵2则与は밝5nzs지의e，  유 g 9e4으n马eh9a省생이t s莱 5 ,り舍方이, ga 하中g,에의1表넓해u포る합  则8는ク的n의의so. 4A个y。政A波献 作지中日ト别 fのス.クS n国 gi ha유ピ  dgs유m兰5다seルン전과,은d있 县・A
 ```
-DUTF2 bytes length: 3744
+DUTF2 bytes length: 3744  
 UTF8 bytes length: 4134
 
 Examples of encoding and decoding in other languages and mixed language: [DUTF2Test](./src/test/java/com/yaoyang/dutf/DUTF2Test.java)
